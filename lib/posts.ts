@@ -20,7 +20,10 @@ export function getSortedPostsData() {
     // gray-matterで投稿のメタデータ部分をオブジェクトとして取得
     const matterResult = matter(fileContents)
 
-    return { id, ...matterResult.data }
+    return {
+      id,
+      ...(matterResult.data as { date: string; title: string })
+    }
   })
 
   // 投稿を日付でソートして返す
@@ -58,7 +61,7 @@ export function getAllPostIds() {
   })
 }
 
-export async function getPostData(id) {
+export async function getPostData(id: string) {
   const fullPath = path.join(postsDirectory, `${id}.md`)
   const fileContents = fs.readFileSync(fullPath, 'utf8')
 
@@ -75,6 +78,6 @@ export async function getPostData(id) {
   return {
     id,
     contentHtml,
-    ...matterResult.data
+    ...(matterResult.data as { date: string; title: string })
   }
 }
